@@ -516,6 +516,22 @@ def admin_delete_product(product_id):
 def admin_settings():
     return render_template('admin/settings.html', title='Admin Settings')            
 
-if __name__ == '__main__':
-    init_db()
-    app.run(debug=True)
+# Add this at the end of app.py
+if __name__ != '__main__':
+    # For production (Vercel)
+    import os
+    # Ensure database is initialized
+    with app.app_context():
+        db.create_all()
+        # Check if admin user exists, if not create one
+        if User.query.filter_by(username='admin').first() is None:
+            admin = User(
+                username='admin',
+                email='admin@frozenkadai.com',
+                phone='9999999999',
+                address='Admin Address',
+                password='admin123'  # Change in production
+            )
+            db.session.add(admin)
+            db.session.commit()
+            print("Admin user created!")
