@@ -1,0 +1,79 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="fas fa-edit me-2"></i>Edit Product</h2>
+        <a href="{{ url_for('admin_products') }}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Back to Products
+        </a>
+    </div>
+    
+    <div class="card shadow">
+        <div class="card-body">
+            <form method="POST">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Product Name *</label>
+                        <input type="text" class="form-control" name="name" value="{{ product.name }}" required>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Category *</label>
+                        <select class="form-select" name="category" required>
+                            <option value="Whole Chicken" {% if product.category == 'Whole Chicken' %}selected{% endif %}>Whole Chicken</option>
+                            <option value="Chicken" {% if product.category == 'Chicken' %}selected{% endif %}>Chicken Portions</option>
+                            <option value="Ready-to-Cook" {% if product.category == 'Ready-to-Cook' %}selected{% endif %}>Ready-to-Cook</option>
+                            <option value="Cold Cuts" {% if product.category == 'Cold Cuts' %}selected{% endif %}>Cold Cuts</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Price per kg (₹) *</label>
+                        <input type="number" class="form-control" name="price_per_kg" step="0.01" min="0" value="{{ product.price_per_kg }}" required>
+                    </div>
+                    
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Stock Status *</label>
+                        <select class="form-select" name="stock_status" required>
+                            <option value="In Stock" {% if product.stock_status == 'In Stock' %}selected{% endif %}>In Stock</option>
+                            <option value="Limited Stock" {% if product.stock_status == 'Limited Stock' %}selected{% endif %}>Limited Stock</option>
+                            <option value="Out of Stock" {% if product.stock_status == 'Out of Stock' %}selected{% endif %}>Out of Stock</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Image File</label>
+                        <input type="text" class="form-control" name="image_file" value="{{ product.image_file }}">
+                        <small class="text-muted">Current: {{ product.image_file }}</small>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Description *</label>
+                    <textarea class="form-control" name="description" rows="3" required>{{ product.description }}</textarea>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Thawing Instructions</label>
+                    <textarea class="form-control" name="thawing_instructions" rows="2">{{ product.thawing_instructions or '' }}</textarea>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Nutritional Information</label>
+                    <textarea class="form-control" name="nutritional_info" rows="2">{{ product.nutritional_info or '' }}</textarea>
+                </div>
+                
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" name="is_bestseller" id="bestseller" {% if product.is_bestseller %}checked{% endif %}>
+                    <label class="form-check-label" for="bestseller">Mark as Bestseller</label>
+                </div>
+                
+                <button type="submit" class="btn btn-danger">Update Product</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

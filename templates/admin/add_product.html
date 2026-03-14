@@ -1,0 +1,79 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="fas fa-plus me-2"></i>Add New Product</h2>
+        <a href="{{ url_for('admin_products') }}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Back to Products
+        </a>
+    </div>
+    
+    <div class="card shadow">
+        <div class="card-body">
+            <form method="POST">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Product Name *</label>
+                        <input type="text" class="form-control" name="name" required>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Category *</label>
+                        <select class="form-select" name="category" required>
+                            <option value="">Select Category</option>
+                            <option value="Whole Chicken">Whole Chicken</option>
+                            <option value="Chicken">Chicken Portions</option>
+                            <option value="Ready-to-Cook">Ready-to-Cook</option>
+                            <option value="Cold Cuts">Cold Cuts</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Price per kg (₹) *</label>
+                        <input type="number" class="form-control" name="price_per_kg" step="0.01" min="0" required>
+                    </div>
+                    
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Stock Status *</label>
+                        <select class="form-select" name="stock_status" required>
+                            <option value="In Stock">In Stock</option>
+                            <option value="Limited Stock">Limited Stock</option>
+                            <option value="Out of Stock">Out of Stock</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Image File</label>
+                        <input type="text" class="form-control" name="image_file" placeholder="filename.jpg">
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Description *</label>
+                    <textarea class="form-control" name="description" rows="3" required></textarea>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Thawing Instructions</label>
+                    <textarea class="form-control" name="thawing_instructions" rows="2"></textarea>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Nutritional Information</label>
+                    <textarea class="form-control" name="nutritional_info" rows="2"></textarea>
+                </div>
+                
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" name="is_bestseller" id="bestseller">
+                    <label class="form-check-label" for="bestseller">Mark as Bestseller</label>
+                </div>
+                
+                <button type="submit" class="btn btn-danger">Add Product</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

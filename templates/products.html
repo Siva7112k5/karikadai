@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-4">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h2>Our Frozen Products</h2>
+            <p class="text-muted">Farm-frozen at peak freshness • Delivered to your doorstep</p>
+        </div>
+        <div class="col-md-4">
+            <div class="input-group">
+                <label class="input-group-text" for="categoryFilter">Category</label>
+                <select class="form-select" id="categoryFilter" onchange="filterCategory(this.value)">
+                    <option value="all" {% if current_category == 'all' %}selected{% endif %}>All Categories</option>
+                    {% for category in categories %}
+                    <option value="{{ category }}" {% if current_category == category %}selected{% endif %}>{{ category }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Products Grid -->
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
+        {% for product in products %}
+        <div class="col">
+            <div class="card h-100 shadow-sm product-card">
+                {% if product.is_bestseller %}
+                <span class="position-absolute top-0 start-0 badge bg-warning text-dark m-2 z-index-1">Bestseller</span>
+                {% endif %}
+                <img src="{{ url_for('static', filename='images/' + product.image_file) }}" 
+                     class="card-img-top" alt="{{ product.name }}" style="height: 180px; object-fit: cover;">
+                <div class="card-body">
+                    <h6 class="card-title">{{ product.name }}</h6>
+                    <p class="text-muted small mb-2">{{ product.category }}</p>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="h5 text-danger mb-0">₹{{ product.price_per_kg }}/kg</span>
+                        {% if product.stock_status == 'In Stock' %}
+                        <span class="badge bg-success">In Stock</span>
+                        {% else %}
+                        <span class="badge bg-warning text-dark">Limited</span>
+                        {% endif %}
+                    </div>
+                    <div class="d-grid gap-2">
+                        <a href="{{ url_for('product_detail', product_id=product.id) }}" class="btn btn-sm btn-outline-danger">Quick View</a>
+                        <button class="btn btn-sm btn-danger add-to-cart" data-product-id="{{ product.id }}">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12 text-center py-5">
+            <i class="fas fa-box-open fa-4x text-muted mb-3"></i>
+            <h4>No products found</h4>
+            <p class="text-muted">Try a different category or check back later.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+function filterCategory(category) {
+    window.location.href = "{{ url_for('products') }}?category=" + category;
+}
+
+$(document).ready(function() {
+    $('.add-to-cart').click(function() {
+        var productId = $(this).data('product-id');
+        {% if current_user.is_authenticated %}
+            $.ajax({
+                url: '{{ url_for("add_to_cart") }}',
+                type: 'POST',
+                data: {
+                    product_id: productId,
+                    quantity: 1.0
+                },
+                success: function(response) {
+                    location.reload();
+                }
+            });
+        {% else %}
+            window.location.href = '{{ url_for("login") }}';
+        {% endif %}
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,120 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-danger sticky-top shadow">
+    <div class="container">
+        <!-- Brand -->
+        <a class="navbar-brand fw-bold" href="{{ url_for('home') }}">
+            <i class="fas fa-snowflake me-2"></i>FROZEN KADAI
+        </a>
+        
+        <!-- Mobile Toggle -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <!-- Main Navigation -->
+        <div class="collapse navbar-collapse" id="navbarMain">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint == 'home' %}active{% endif %}" href="{{ url_for('home') }}">
+                        <i class="fas fa-home"></i> Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint == 'products' %}active{% endif %}" href="{{ url_for('products') }}">
+                        <i class="fas fa-drumstick-bite"></i> All Products
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint == 'about' %}active{% endif %}" href="{{ url_for('about') }}">
+                        <i class="fas fa-info-circle"></i> About
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint == 'contact' %}active{% endif %}" href="{{ url_for('contact') }}">
+                        <i class="fas fa-envelope"></i> Contact
+                    </a>
+                </li>
+            </ul>
+            
+            <!-- Location Picker -->
+            <div class="d-flex me-3">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text bg-white border-end-0">
+                        <i class="fas fa-map-marker-alt text-danger"></i>
+                    </span>
+                    <input type="text" class="form-control border-start-0" id="locationPicker" 
+                           placeholder="Enter delivery area" value="{{ session.get('delivery_location', '') }}">
+                    <button class="btn btn-light" type="button" id="setLocation">
+                        <i class="fas fa-check"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Search Bar -->
+            <form class="d-flex me-3" action="{{ url_for('products') }}" method="GET">
+                <div class="input-group input-group-sm">
+                    <input type="search" name="search" class="form-control" placeholder="Search products...">
+                    <button class="btn btn-light" type="submit">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </form>
+            
+            <!-- Cart Icon -->
+            <a href="{{ url_for('cart') }}" class="btn btn-outline-light position-relative me-2">
+                <i class="fas fa-shopping-cart"></i>
+                {% if current_user.is_authenticated %}
+                    {% set cart_count = current_user.cart_items|sum(attribute='quantity') %}
+                    {% if cart_count > 0 %}
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark">
+                            {{ cart_count|round|int }}
+                        </span>
+                    {% endif %}
+                {% endif %}
+            </a>
+            
+            <!-- User Menu -->
+            {% if current_user.is_authenticated %}
+            <div class="dropdown">
+                <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    <i class="fas fa-user"></i> {{ current_user.username }}
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="#"><i class="fas fa-user-circle"></i> Profile</a></li>
+                    <li><a class="dropdown-item" href="#"><i class="fas fa-history"></i> Orders</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item text-danger" href="{{ url_for('logout') }}">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a></li>
+                </ul>
+            </div>
+            {% else %}
+            <div>
+                <a href="{{ url_for('login') }}" class="btn btn-outline-light me-2">Login</a>
+                <a href="{{ url_for('signup') }}" class="btn btn-light">Sign Up</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</nav>
+
+<script>
+$(document).ready(function() {
+    // Location picker
+    $('#setLocation').click(function() {
+        var location = $('#locationPicker').val();
+        if (location) {
+            $.ajax({
+                url: '{{ url_for("set_location") }}',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({location: location}),
+                success: function(response) {
+                    if (response.success) {
+                        alert('Delivery location set to: ' + location);
+                    }
+                }
+            });
+        }
+    });
+});
+</script>

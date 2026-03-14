@@ -1,0 +1,247 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section bg-dark text-white py-5" style="background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('{{ url_for('static', filename='images/hero-banner.jpg') }}'); background-size: cover; background-position: center;">
+    <div class="container text-center py-5">
+        <h1 class="display-4 fw-bold mb-4">Farm Frozen, Chef Ready</h1>
+        <p class="lead mb-4">Premium quality frozen meat delivered to your doorstep.<br>Maintained at -18°C throughout the journey.</p>
+        <div class="d-flex justify-content-center gap-3">
+            <a href="{{ url_for('products') }}" class="btn btn-danger btn-lg px-4">Shop Now</a>
+            <a href="{{ url_for('about') }}" class="btn btn-outline-light btn-lg px-4">Our Process</a>
+        </div>
+    </div>
+</section>
+
+<!-- Frozen Assurance Bar -->
+{% include 'includes/_assurance_bar.html' %}
+
+<!-- Categories Section -->
+<section class="container my-5">
+    <h2 class="text-center mb-4">Shop by Category</h2>
+    <div class="row g-4">
+        <div class="col-md-3 col-6">
+            <a href="{{ url_for('products', category='Whole Chicken') }}" class="text-decoration-none">
+                <div class="card category-card text-center h-100 shadow-sm">
+                    <div class="card-body">
+                        <i class="fas fa-drumstick-bite fa-3x text-danger mb-3"></i>
+                        <h5>Whole Chicken</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3 col-6">
+            <a href="{{ url_for('products', category='Chicken') }}" class="text-decoration-none">
+                <div class="card category-card text-center h-100 shadow-sm">
+                    <div class="card-body">
+                        <i class="fas fa-utensils fa-3x text-danger mb-3"></i>
+                        <h5>Chicken Portions</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3 col-6">
+            <a href="{{ url_for('products', category='Ready-to-Cook') }}" class="text-decoration-none">
+                <div class="card category-card text-center h-100 shadow-sm">
+                    <div class="card-body">
+                        <i class="fas fa-fire fa-3x text-danger mb-3"></i>
+                        <h5>Ready-to-Cook</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3 col-6">
+            <a href="{{ url_for('products', category='Cold Cuts') }}" class="text-decoration-none">
+                <div class="card category-card text-center h-100 shadow-sm">
+                    <div class="card-body">
+                        <i class="fas fa-hotdog fa-3x text-danger mb-3"></i>
+                        <h5>Cold Cuts</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Products -->
+<section class="container my-5">
+    <h2 class="text-center mb-4">Featured Products</h2>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for product in featured_products %}
+        <div class="col">
+            <div class="card h-100 shadow-sm product-card">
+                <div class="position-relative">
+                    {% if product.is_bestseller %}
+                    <span class="position-absolute top-0 start-0 badge bg-warning text-dark m-2">Bestseller</span>
+                    {% endif %}
+                    <img src="{{ url_for('static', filename='images/' + product.image_file) }}" 
+                         class="card-img-top" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <p class="card-text text-muted small">{{ product.description[:80] }}...</p>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="h5 text-danger mb-0">₹{{ product.price_per_kg }}/kg</span>
+                        <span class="badge bg-success">{{ product.stock_status }}</span>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <a href="{{ url_for('product_detail', product_id=product.id) }}" class="btn btn-outline-danger">Quick View</a>
+                        <button class="btn btn-danger add-to-cart" data-product-id="{{ product.id }}">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="text-center mt-4">
+        <a href="{{ url_for('products') }}" class="btn btn-outline-danger btn-lg">View All Products</a>
+    </div>
+</section>
+
+<!-- Customer Reviews (KariKadai Style) -->
+<section class="container my-5">
+    <h2 class="text-center mb-4">What Our Customers Say</h2>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0 bg-light">
+                <div class="card-body">
+                    <div class="text-warning mb-2">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <p class="card-text fst-italic">"Very fresh and clean meat! Delivery was on time and the packing was perfect. The frozen packaging kept everything solid. Definitely ordering again."</p>
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-user-circle fa-2x text-secondary me-2"></i>
+                        <div>
+                            <h6 class="mb-0">Kumar S.</h6>
+                            <small class="text-muted">Rmk nagar, Palani</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0 bg-light">
+                <div class="card-body">
+                    <div class="text-warning mb-2">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <p class="card-text fst-italic">"Excellent service and super fresh meat. The vacuum sealing makes all the difference. Worth every rupee! The chicken breast was so tender."</p>
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-user-circle fa-2x text-secondary me-2"></i>
+                        <div>
+                            <h6 class="mb-0">Priya R.</h6>
+                            <small class="text-muted">Nethaji nagar, Palani</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0 bg-light">
+                <div class="card-body">
+                    <div class="text-warning mb-2">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                    </div>
+                    <p class="card-text fst-italic">"Top-notch quality and reliable delivery. Frozen Kadai never disappoints. The thawing instructions were very helpful. My family loved the kebabs!"</p>
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-user-circle fa-2x text-secondary me-2"></i>
+                        <div>
+                            <h6 class="mb-0">Mohan K.</h6>
+                            <small class="text-muted">Rf road, Palani</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Flash Sale Timer -->
+<section class="container my-5">
+    <div class="card bg-danger text-white">
+        <div class="card-body p-5">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h3 class="fw-bold">Flash Sale! 24 Hours Only</h3>
+                    <p class="lead mb-0">Get 20% off on all Chicken products</p>
+                </div>
+                <div class="col-md-6">
+                    <div class="d-flex justify-content-center gap-3">
+                        <div class="text-center">
+                            <div class="bg-white text-danger rounded p-3">
+                                <span class="h2 fw-bold" id="hours">00</span>
+                            </div>
+                            <span class="small">Hours</span>
+                        </div>
+                        <div class="text-center">
+                            <div class="bg-white text-danger rounded p-3">
+                                <span class="h2 fw-bold" id="minutes">00</span>
+                            </div>
+                            <span class="small">Minutes</span>
+                        </div>
+                        <div class="text-center">
+                            <div class="bg-white text-danger rounded p-3">
+                                <span class="h2 fw-bold" id="seconds">00</span>
+                            </div>
+                            <span class="small">Seconds</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+// Flash Sale Timer
+function updateTimer() {
+    // Set end time to 24 hours from now
+    var endTime = new Date();
+    endTime.setHours(endTime.getHours() + 24);
+    
+    var timer = setInterval(function() {
+        var now = new Date().getTime();
+        var distance = endTime - now;
+        
+        var hours = Math.floor(distance / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        
+        document.getElementById('hours').innerHTML = ('0' + hours).slice(-2);
+        document.getElementById('minutes').innerHTML = ('0' + minutes).slice(-2);
+        document.getElementById('seconds').innerHTML = ('0' + seconds).slice(-2);
+        
+        if (distance < 0) {
+            clearInterval(timer);
+            document.getElementById('hours').innerHTML = '00';
+            document.getElementById('minutes').innerHTML = '00';
+            document.getElementById('seconds').innerHTML = '00';
+        }
+    }, 1000);
+}
+
+// Add to Cart functionality
+$(document).ready(function() {
+    updateTimer();
+    
+    $('.add-to-cart').click(function() {
+        var productId = $(this).data('product-id');
+        {% if current_user.is_authenticated %}
+            $.ajax({
+                url: '{{ url_for("add_to_cart") }}',
+                type: 'POST',
+                data: {
+                    product_id: productId,
+                    quantity: 1.0
+                },
+                success: function(response) {
+                    location.reload();
+                }
+            });
+        {% else %}
+            window.location.href = '{{ url_for("login") }}';
+        {% endif %}
+    });
+});
+</script>
+{% endblock %}

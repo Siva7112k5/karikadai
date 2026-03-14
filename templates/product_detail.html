@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('home') }}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{ url_for('products') }}">Products</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
+        </ol>
+    </nav>
+    
+    <!-- Product Detail -->
+    <div class="row g-5">
+        <!-- Product Image -->
+        <div class="col-md-5">
+            <div class="card shadow-sm">
+                <img src="{{ url_for('static', filename='images/' + product.image_file) }}" 
+                     class="card-img-top" alt="{{ product.name }}">
+            </div>
+        </div>
+        
+        <!-- Product Info -->
+        <div class="col-md-7">
+            <h1 class="mb-3">{{ product.name }}</h1>
+            
+            <!-- Price & Stock -->
+            <div class="d-flex align-items-center gap-3 mb-4">
+                <span class="display-5 text-danger fw-bold">₹{{ product.price_per_kg }}/kg</span>
+                {% if product.stock_status == 'In Stock' %}
+                <span class="badge bg-success fs-6">In Stock</span>
+                {% else %}
+                <span class="badge bg-warning text-dark fs-6">{{ product.stock_status }}</span>
+                {% endif %}
+            </div>
+            
+            <!-- Description -->
+            <div class="mb-4">
+                <h5>Description</h5>
+                <p class="text-muted">{{ product.description }}</p>
+            </div>
+            
+            <!-- Highlights (like KariKadai style) -->
+            <div class="card bg-light mb-4">
+                <div class="card-body">
+                    <h6>💥 What's Inside:</h6>
+                    <ul class="text-muted">
+                        <li>Premium quality frozen meat</li>
+                        <li>No added preservatives</li>
+                        <li>Vacuum sealed for freshness</li>
+                        <li>Cleaned and ready to cook</li>
+                    </ul>
+                    
+                    <h6 class="mt-3">💥 Highlights:</h6>
+                    <ul class="text-muted">
+                        <li>Frozen at peak freshness</li>
+                        <li>From farm-raised chickens</li>
+                        <li>Maintained cold chain</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Nutritional Info (Quick View) -->
+            <div class="accordion mb-4" id="productAccordion">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nutritionInfo">
+                            <i class="fas fa-chart-bar me-2"></i> Nutritional Information
+                        </button>
+                    </h2>
+                    <div id="nutritionInfo" class="accordion-collapse collapse" data-bs-parent="#productAccordion">
+                        <div class="accordion-body">
+                            {{ product.nutritional_info or 'Nutritional information not available.' }}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Thawing Instructions Toggle -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#thawingInfo">
+                            <i class="fas fa-snowflake me-2"></i> How to Thaw
+                        </button>
+                    </h2>
+                    <div id="thawingInfo" class="accordion-collapse collapse" data-bs-parent="#productAccordion">
+                        <div class="accordion-body">
+                            {{ product.thawing_instructions or 'For best results, thaw in refrigerator overnight. Never refreeze after thawing.' }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Add to Cart Form -->
+            <form action="{{ url_for('add_to_cart') }}" method="POST" class="mb-4">
+                {{ form.hidden_tag() }}
+                <input type="hidden" name="product_id" value="{{ product.id }}">
+                <div class="row g-3 align-items-center">
+                    <div class="col-auto">
+                        <label class="fw-bold">Quantity (kg):</label>
+                    </div>
+                    <div class="col-auto">
+                        {{ form.quantity(class="form-control", type="number", step="0.5", min="0.5", value="1.0") }}
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" class="btn btn-danger btn-lg">
+                            <i class="fas fa-cart-plus me-2"></i>Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </form>
+            
+            <!-- Subscription Option -->
+            <div class="card border-success">
+                <div class="card-body">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="subscriptionCheck">
+                        <label class="form-check-label" for="subscriptionCheck">
+                            <strong>Subscribe & Save 10%</strong> - Get this product delivered monthly. Cancel anytime.
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Related Products -->
+    {% if related_products %}
+    <div class="mt-5">
+        <h3 class="mb-4">You might also like</h3>
+        <div class="row row-cols-1 row-cols-md-4 g-4">
+            {% for related in related_products %}
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <img src="{{ url_for('static', filename='images/' + related.image_file) }}" 
+                         class="card-img-top" alt="{{ related.name }}" style="height: 150px; object-fit: cover;">
+                    <div class="card-body">
+                        <h6 class="card-title">{{ related.name }}</h6>
+                        <p class="text-danger fw-bold mb-2">₹{{ related.price_per_kg }}/kg</p>
+                        <a href="{{ url_for('product_detail', product_id=related.id) }}" class="btn btn-sm btn-outline-danger w-100">View</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

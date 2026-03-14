@@ -1,0 +1,61 @@
+<footer class="bg-dark text-white pt-5 pb-4 mt-5">
+    <div class="container">
+        <div class="row">
+            <!-- About -->
+            <div class="col-md-4 mb-4">
+                <h5 class="text-danger mb-3">FROZEN KADAI</h5>
+                <p class="small text-muted">Your trusted partner for premium frozen meat. We maintain strict cold chain from warehouse to your doorstep, ensuring farm-frozen quality every time.</p>
+                <div class="mt-3">
+                    <a href="#" class="text-white me-2"><i class="fab fa-facebook fa-lg"></i></a>
+                    <a href="#" class="text-white me-2"><i class="fab fa-instagram fa-lg"></i></a>
+                    <a href="#" class="text-white me-2"><i class="fab fa-twitter fa-lg"></i></a>
+                    <a href="#" class="text-white"><i class="fab fa-whatsapp fa-lg"></i></a>
+                </div>
+            </div>
+            
+            <!-- Quick Links -->
+            <div class="col-md-2 mb-4">
+                <h6 class="text-uppercase fw-bold mb-3">Quick Links</h6>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a href="{{ url_for('home') }}" class="text-white-50 text-decoration-none">Home</a></li>
+                    <li class="mb-2"><a href="{{ url_for('products') }}" class="text-white-50 text-decoration-none">Products</a></li>
+                    <li class="mb-2"><a href="{{ url_for('about') }}" class="text-white-50 text-decoration-none">About Us</a></li>
+                    <li class="mb-2"><a href="{{ url_for('contact') }}" class="text-white-50 text-decoration-none">Contact</a></li>
+                </ul>
+            </div>
+            
+            <!-- Categories -->
+            <div class="col-md-3 mb-4">
+                <h6 class="text-uppercase fw-bold mb-3">Categories</h6>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a href="{{ url_for('products', category='Whole Chicken') }}" class="text-white-50 text-decoration-none">Whole Chicken</a></li>
+                    <li class="mb-2"><a href="{{ url_for('products', category='Chicken') }}" class="text-white-50 text-decoration-none">Chicken Portions</a></li>
+                    <li class="mb-2"><a href="{{ url_for('products', category='Ready-to-Cook') }}" class="text-white-50 text-decoration-none">Ready-to-Cook</a></li>
+                    <li class="mb-2"><a href="{{ url_for('products', category='Cold Cuts') }}" class="text-white-50 text-decoration-none">Cold Cuts</a></li>
+                </ul>
+            </div>
+            
+            <!-- Contact -->
+            <div class="col-md-3 mb-4">
+                <h6 class="text-uppercase fw-bold mb-3">Contact Us</h6>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><i class="fas fa-map-marker-alt me-2 text-danger"></i> 123 Meat Street, Palani</li>
+                    <li class="mb-2"><i class="fas fa-phone me-2 text-danger"></i> +91 98765 43210</li>
+                    <li class="mb-2"><i class="fas fa-envelope me-2 text-danger"></i> support@frozenkadai.com</li>
+                    <li class="mb-2"><i class="fas fa-clock me-2 text-danger"></i> Mon-Sat: 9AM - 8PM</li>
+                </ul>
+            </div>
+        </div>
+        
+        <hr class="bg-secondary">
+        
+        <div class="row align-items-center">
+            <div class="col-md-6 text-center text-md-start">
+                <p class="small text-muted mb-0">© 2024 Frozen Kadai. All rights reserved.</p>
+            </div>
+            <div class="col-md-6 text-center text-md-end">
+                <img src="https://via.placeholder.com/150x40/333/fff?text=Payment+Methods" alt="Payment methods" class="img-fluid" style="filter: brightness(0.8);">
+            </div>
+        </div>
+    </div>
+</footer>
